@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/requests")
 public class RequestController {
+
     private final RequestService service;
 
     public RequestController(RequestService service) {
@@ -19,8 +20,12 @@ public class RequestController {
     @GetMapping
     public String list(Model model, Authentication auth) {
         model.addAttribute("entries", service.findAll());
-        model.addAttribute("isAdmin", auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRADOR")));
-        model.addAttribute("isAprobador", auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_APROBADOR")));
+        model.addAttribute("isAdmin",
+                auth.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRADOR")));
+        model.addAttribute("isAprobador",
+                auth.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ROLE_APROBADOR")));
         return "requests";
     }
 
@@ -38,7 +43,11 @@ public class RequestController {
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
-        var entry = service.findAll().stream().filter(e -> e.getId().equals(id)).findFirst().orElseThrow();
+        // ✅ Ahora compila porque RequestEntry tiene getId()
+        RequestEntry entry = service.findAll().stream()
+                .filter(e -> e.getId().equals(id))
+                .findFirst()
+                .orElseThrow();
         model.addAttribute("entry", entry);
         return "register"; // reutilizamos la vista de registro como edición
     }

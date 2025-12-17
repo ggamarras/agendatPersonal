@@ -10,10 +10,6 @@ import java.util.List;
 public class RequestService {
     private final RequestEntryRepository repo;
 
-    public RequestService(RequestServiceDependencies deps) { // opcional si quieres inyectables
-        this.repo = deps.repo();
-    }
-
     public RequestService(RequestEntryRepository repo) {
         this.repo = repo;
     }
@@ -37,10 +33,16 @@ public class RequestService {
     }
 
     public void approve(Long id) {
-        repo.findById(id).ifPresent(e -> { e.setStatus(RequestEntry.Status.APROBADO); repo.save(e); });
+        repo.findById(id).ifPresent(e -> {
+            e.setStatus(RequestEntry.Status.APROBADO);
+            repo.save(e);
+        });
     }
 
     public void reject(Long id) {
-        repo.findById(id).ifPresent(e -> { e.setStatus(RequestEntry.Status.RECHAZADO); repo.save(e); });
+        repo.findById(id).ifPresent(e -> {
+            e.setStatus(RequestEntry.Status.RECHAZADO);
+            repo.save(e);
+        });
     }
 }

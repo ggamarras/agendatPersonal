@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.classic.CloseableHttpClient;
+//import org.apache.hc.client5.http.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient; // ✅ correcto
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Value;
