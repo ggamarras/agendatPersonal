@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  vault-web:
+    build: .
+    container_name: vault-web
+    environment:
+      - VAULT_TOKEN=${VAULT_TOKEN} # si necesitas usar adminToken en app
+    ports:
+      - "8080:80"
+    expose:
+      - "8080"
+    depends_on:
+      - vault
+    networks:
+      - appnet
+
+  vault:
+    image: hashicorp/vault:1.16
+    container_name: vault
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=root
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    ports:
+      - "8200:8200"
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver: bridge

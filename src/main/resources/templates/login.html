@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ingreso</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h2>Ingreso</h2>
+<form method="post" action="/login">
+    <label>Usuario</label>
+    <input type="text" name="username" required>
+    <label>Contraseña</label>
+    <input type="password" name="password" required>
+    <button type="submit">Ingresar</button>
+    <div>
+      <span style="color:red;">
+        <!-- error -->
+        [[${param.error} ? 'Credenciales inválidas' : '']]
+      </span>
+        <span style="color:green;">
+        [[${param.logout} ? 'Sesión cerrada' : '']]
+      </span>
+    </div>
+</form>
+</body>
+</html>

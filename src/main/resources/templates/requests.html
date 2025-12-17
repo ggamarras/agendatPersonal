@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bandeja de solicitudes</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h2>Bandeja de solicitudes</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th><th>Nombre</th><th>Apellido</th><th>Dirección</th><th>Teléfono</th><th>Estado</th><th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="e : ${entries}">
+        <td th:text="${e.id}"></td>
+        <td th:text="${e.nombre}"></td>
+        <td th:text="${e.apellido}"></td>
+        <td th:text="${e.direccion}"></td>
+        <td th:text="${e.telefono}"></td>
+        <td th:text="${e.status}"></td>
+        <td>
+            <form th:action="@{'/requests/' + ${e.id} + '/approve'}" method="post" th:if="${isAdmin or isAprobador}">
+                <button type="submit">Aprobar</button>
+            </form>
+            <form th:action="@{'/requests/' + ${e.id} + '/reject'}" method="post" th:if="${isAdmin or isAprobador}">
+                <button type="submit">Rechazar</button>
+            </form>
+            <a th:href="@{'/requests/' + ${e.id} + '/edit'}" th:if="${isAdmin}">Editar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
