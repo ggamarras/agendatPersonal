@@ -9,17 +9,32 @@
 <body>
 <h1>Bienvenido, <span sec:authentication="name"></span></h1>
 
-<p>Tu rol: <span sec:authorize="hasRole('ADMINISTRADOR')">ADMINISTRADOR</span>
+<p>Tu rol:
+    <span sec:authorize="hasRole('ADMINISTRADOR')">ADMINISTRADOR</span>
     <span sec:authorize="hasRole('REGISTRADOR')">REGISTRADOR</span>
-    <span sec:authorize="hasRole('APROBADOR')">APROBADOR</span></p>
+    <span sec:authorize="hasRole('APROBADOR')">APROBADOR</span>
+</p>
 
 <ul>
-    <li sec:authorize="hasAnyRole('ADMINISTRADOR','REGISTRADOR')">
-        <a th:href="@{/register}">Registrar solicitud</a>
+    <!-- ADMINISTRADOR: menú completo -->
+    <li sec:authorize="hasRole('ADMINISTRADOR')">
+        <a th:href="@{/register}">Ingresar Registros</a>
     </li>
-    <li sec:authorize="hasAnyRole('ADMINISTRADOR','APROBADOR')">
-        <a th:href="@{/requests}">Ver solicitudes</a>
+    <li sec:authorize="hasRole('ADMINISTRADOR')">
+        <a th:href="@{/requests}">Bandeja de Registros</a>
     </li>
+
+    <!-- REGISTRADOR: solo registro -->
+    <li sec:authorize="hasRole('REGISTRADOR')">
+        <a th:href="@{/register}">Ingresar Registros</a>
+    </li>
+
+    <!-- APROBADOR: solo bandeja -->
+    <li sec:authorize="hasRole('APROBADOR')">
+        <a th:href="@{/requests}">Bandeja de Registros</a>
+    </li>
+
+    <!-- Botón de logout siempre visible -->
     <li>
         <a th:href="@{/logout}">Cerrar sesión</a>
     </li>

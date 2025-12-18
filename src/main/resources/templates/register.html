@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Registro de datos</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 <h2>Registro de datos</h2>
 <a th:href="@{/logout}">Cerrar sesión</a>
+
 <form method="post" th:action="@{/register}" th:object="${entry}">
     <label>Nombre</label>
     <input type="text" th:field="*{nombre}" required>
+
     <label>Apellido</label>
     <input type="text" th:field="*{apellido}" required>
+
     <label>Dirección</label>
     <input type="text" th:field="*{direccion}" required>
+
     <label>Teléfono</label>
     <input type="text" th:field="*{telefono}" required>
-    <button type="submit">Guardar</button>
+
+    <!-- Botón de confirmación -->
+    <button type="submit">Grabar</button>
+
+    <!-- Mensaje de confirmación -->
     <div>
-      <span style="color:green;">
-        [[${param.ok} ? 'Registro creado' : '']]
-      </span>
+        <span style="color:green;">
+            [[${param.ok} ? 'Registro creado' : '']]
+        </span>
     </div>
 </form>
 </body>

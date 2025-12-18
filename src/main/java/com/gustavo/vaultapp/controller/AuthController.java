@@ -13,6 +13,7 @@ public class AuthController {
     @GetMapping("/home")
     public String home() {
         // redirigir según rol
-        return "redirect:/requests";
+        //return "redirect:/requests";
+        return "home";
     }
 }
