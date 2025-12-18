@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Bandeja de solicitudes</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 <h2>Bandeja de solicitudes</h2>
+<a th:href="@{/logout}">Cerrar sesión</a>
 <table border="1">
     <thead>
     <tr>

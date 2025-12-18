@@ -22,7 +22,9 @@ public class SecurityConfig {
                 .authenticationProvider(vaultAuthProvider)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/css/**").permitAll()
-                        .requestMatchers("/register/**").hasAnyRole("ADMINISTRADOR","REGISTRADOR")
+                        //.requestMatchers("/register/**").hasAnyRole("ADMINISTRADOR","REGISTRADOR")
+                        .requestMatchers("/requests/**").hasAnyRole("ADMINISTRADOR","APROBADOR","REGISTRADOR")
+                        .requestMatchers("/register", "/register/**").hasAnyRole("ADMINISTRADOR", "REGISTRADOR")
                         .requestMatchers("/requests/**").hasAnyRole("ADMINISTRADOR","APROBADOR")
                         .anyRequest().authenticated()
                 )

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Registro de datos</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 <h2>Registro de datos</h2>
+<a th:href="@{/logout}">Cerrar sesión</a>
 <form method="post" th:action="@{/register}" th:object="${entry}">
     <label>Nombre</label>
     <input type="text" th:field="*{nombre}" required>

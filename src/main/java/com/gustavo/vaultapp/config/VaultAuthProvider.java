@@ -40,7 +40,7 @@ public class VaultAuthProvider implements AuthenticationProvider {
             }
 
             List<SimpleGrantedAuthority> auths = new ArrayList<>();
-            auths.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
+            auths.add(new SimpleGrantedAuthority("ROLE_" + role.name().toUpperCase()));
             return new UsernamePasswordAuthenticationToken(username, null, auths);
 
         } catch (Exception e) {
