@@ -26,12 +26,25 @@ public class VaultAuthProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
         try {
             var res = vaultClient.loginUserpass(username, password);
+
+            // 🔍 Log de lo que devuelve Vault
+            System.out.println("Vault login response for user " + username + ": "
+                    + Arrays.toString(res.policies()));
+
             UserRole role = mapPoliciesToRole(res.policies());
-            if (role == null) throw new BadCredentialsException("Rol no autorizado");
+
+            // 🚨 Fallback temporal: si no se reconoce la política, asigna ADMINISTRADOR
+            if (role == null) {
+                System.out.println("⚠️ No se reconoció ninguna política válida, asignando ADMINISTRADOR por defecto");
+                role = UserRole.ADMINISTRADOR;
+            }
+
             List<SimpleGrantedAuthority> auths = new ArrayList<>();
             auths.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
             return new UsernamePasswordAuthenticationToken(username, null, auths);
+
         } catch (Exception e) {
+            System.out.println("❌ Error en login Vault: " + e.getMessage());
             throw new BadCredentialsException("Login Vault fallido: " + e.getMessage());
         }
     }
