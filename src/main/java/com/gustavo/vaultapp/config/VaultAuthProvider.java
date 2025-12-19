@@ -35,8 +35,7 @@ public class VaultAuthProvider implements AuthenticationProvider {
 
             // 🚨 Fallback temporal: si no se reconoce la política, asigna ADMINISTRADOR
             if (role == null) {
-                System.out.println("⚠️ No se reconoció ninguna política válida, asignando ADMINISTRADOR por defecto");
-                role = UserRole.ADMINISTRADOR;
+                throw new BadCredentialsException("No se reconoció ninguna política válida para el usuario " + username);
             }
 
             List<SimpleGrantedAuthority> auths = new ArrayList<>();
@@ -51,7 +50,7 @@ public class VaultAuthProvider implements AuthenticationProvider {
 
     private UserRole mapPoliciesToRole(String[] policies) {
         var set = Arrays.stream(policies).map(String::toLowerCase).toList();
-        if (set.contains("admin")) return UserRole.ADMINISTRADOR;
+        if (set.contains("administrador")) return UserRole.ADMINISTRADOR;
         if (set.contains("aprobador")) return UserRole.APROBADOR;
         if (set.contains("registrador")) return UserRole.REGISTRADOR;
         return null;

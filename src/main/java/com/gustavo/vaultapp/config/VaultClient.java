@@ -3,9 +3,7 @@ package com.gustavo.vaultapp.config;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-//import org.apache.hc.client5.http.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient; // ✅ correcto
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,19 +27,29 @@ public class VaultClient {
         String url = vaultAddr + "/v1/auth/userpass/login/" + username;
         HttpPost post = new HttpPost(url);
         post.setEntity(new StringEntity("{\"password\":\"" + password + "\"}", StandardCharsets.UTF_8));
+
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             var resp = client.execute(post);
             var node = mapper.readTree(resp.getEntity().getContent());
+
+            // 🔍 Log completo de la respuesta
+            System.out.println("Vault raw login response for user " + username + ": " + node.toPrettyString());
+
             String clientToken = node.path("auth").path("client_token").asText();
-            // Políticas asignadas al usuario
-            var policiesArr = node.path("auth").path("policies");
+
+            // Leer token_policies primero
+            JsonNode policiesArr = node.path("auth").path("token_policies");
+            if (policiesArr.isMissingNode() || policiesArr.size() == 0) {
+                policiesArr = node.path("auth").path("policies");
+            }
+
             String[] policies = new String[policiesArr.size()];
             for (int i = 0; i < policiesArr.size(); i++) {
                 policies[i] = policiesArr.get(i).asText();
             }
+
             return new VaultLoginResult(clientToken, policies);
         }
     }
-
     public record VaultLoginResult(String token, String[] policies) {}
 }

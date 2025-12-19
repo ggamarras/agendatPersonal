@@ -3,7 +3,6 @@ package com.gustavo.vaultapp.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -21,11 +20,16 @@ public class SecurityConfig {
         http
                 .authenticationProvider(vaultAuthProvider)
                 .authorizeHttpRequests(auth -> auth
+                        // Rutas públicas
                         .requestMatchers("/login", "/css/**").permitAll()
-                        //.requestMatchers("/register/**").hasAnyRole("ADMINISTRADOR","REGISTRADOR")
-                        .requestMatchers("/requests/**").hasAnyRole("ADMINISTRADOR","APROBADOR","REGISTRADOR")
+
+                        // Solo ADMINISTRADOR y REGISTRADOR pueden registrar
                         .requestMatchers("/register", "/register/**").hasAnyRole("ADMINISTRADOR", "REGISTRADOR")
-                        .requestMatchers("/requests/**").hasAnyRole("ADMINISTRADOR","APROBADOR")
+
+                        // Solo ADMINISTRADOR y APROBADOR pueden ver la bandeja
+                        .requestMatchers("/requests", "/requests/**").hasAnyRole("ADMINISTRADOR", "APROBADOR")
+
+                        // Cualquier otra ruta requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -35,8 +39,13 @@ public class SecurityConfig {
                         .failureUrl("/login?error")
                         .permitAll()
                 )
-                .logout(l -> l.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll())
-                .csrf(csrf -> csrf.disable()); // para simplificar; en prod habilitar y usar tokens
+                .logout(l -> l
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                )
+                .csrf(csrf -> csrf.disable()); // ⚠️ Deshabilitado para simplificar, en producción habilitar
+
         return http.build();
     }
 }
